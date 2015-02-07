@@ -1642,6 +1642,16 @@ class _FeedParserMixin:
     def _end_link(self):
         value = self.pop('link')
 
+    def _start_im_image(self, attrsD):
+        self._getContext()['im_image_height'] = attrsD.get('height', '')
+        self.push('im_image', 1)
+
+    def _end_im_image(self):
+        context = self._getContext()
+        height = context['im_image_height']
+        value = self.pop('im_image')
+        context.setdefault('im_images', {})
+        context['im_images'][height] = value
     def _start_guid(self, attrsD):
         self.guidislink = (attrsD.get('ispermalink', 'true') == 'true')
         self.push('id', 1)
